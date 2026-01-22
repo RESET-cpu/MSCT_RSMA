@@ -1,0 +1,28 @@
+{
+  "P": [
+    {
+      "P_dBW": 0,
+      "sdma_scsi_noncoop": 0.06108099628372712
+    },
+    {
+      "P_dBW": 5,
+      "sdma_scsi_noncoop": 0.17358983485760965
+    },
+    {
+      "P_dBW": 10,
+      "sdma_scsi_noncoop": 0.4625393554194793
+    },
+    {
+      "P_dBW": 15,
+      "sdma_scsi_noncoop": 1.038679880929831
+    },
+    {
+      "P_dBW": 20,
+      "sdma_scsi_noncoop": 1.705973857218456
+    },
+    {
+      "P_dBW": 25,
+      "sdma_scsi_noncoop": 2.767157683456201
+    }
+  ]
+}

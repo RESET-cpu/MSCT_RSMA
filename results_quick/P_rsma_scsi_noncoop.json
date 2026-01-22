@@ -1,0 +1,28 @@
+{
+  "P": [
+    {
+      "P_dBW": 0,
+      "rsma_scsi_noncoop": 0.07105083421763851
+    },
+    {
+      "P_dBW": 5,
+      "rsma_scsi_noncoop": 0.21445470783029888
+    },
+    {
+      "P_dBW": 10,
+      "rsma_scsi_noncoop": 0.5502905127053478
+    },
+    {
+      "P_dBW": 15,
+      "rsma_scsi_noncoop": 1.2569492192246048
+    },
+    {
+      "P_dBW": 20,
+      "rsma_scsi_noncoop": 2.224999997227603
+    },
+    {
+      "P_dBW": 25,
+      "rsma_scsi_noncoop": 3.800875773694183
+    }
+  ]
+}

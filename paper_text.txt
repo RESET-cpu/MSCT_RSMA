@@ -1,0 +1,826 @@
+
+
+===== PAGE 1 =====
+
+3590 IEEE WIRELESS COMMUNICATIONS LETTERS, VOL. 14, NO. 11, NOVEMBER 2025
+Multi-Satellite Cooperative MIMO Transmission:
+Statistical CSI-Aware RSMA Precoding Design
+Sangwon Jo , Graduate Student Member, IEEE , and Seok-Hwan Park , Senior Member, IEEE
+Abstract—We investigate inter-satellite cooperative transmis-
+sion in a multiple low-Earth orbit (LEO) satellite communication
+system to enhance spectral efﬁciency. Speciﬁcally, we design
+multiple-input multiple-output (MIMO) precoding at LEO satel-
+lites for cooperative rate-splitting multiple access (RSMA).
+Given the difﬁculty of acquiring instantaneous channel state
+information (iCSI) due to long delays and Doppler effects, we for-
+mulate an ergodic max-min fairness rate (MMFR) maximization
+problem based on statistical CSI (sCSI). To address the challenge
+of ergodic rate evaluation, we approximate the problem using
+closed-form upper bounds and develop a weighted minimum
+mean squared error-based algorithm to obtain a stationary
+point. Simulation results demonstrate that the proposed sCSI-
+based RSMA scheme approaches iCSI-based performance and
+signiﬁcantly outperforms conventional space-division multiple
+access.
+Index Terms—Satellite communications, cooperative satellites,
+massive MIMO, rate-splitting multiple access, statistical CSI.
+I. I NTRODUCTION
+M
+ASSIVE multiple-input multiple-output (mMIMO) uti-
+lizes a large number of antennas to deliver reliable
+and high data-rate communication links [1]. Several recent
+works have investigated mMIMO transmission for satel-
+lite communication (SATCOM) using low-Earth-orbit (LEO)
+satellites [2], [3], [4], [5], [6], [7]. In particular, [2] studied
+the channel modeling and designed downlink precoders and
+uplink receivers based on statistical channel state information
+(sCSI), recognizing that acquiring instantaneous CSI (iCSI)
+is highly challenging in LEO SATCOM due to impairments
+such as propagation delay and Doppler shifts, whereas sCSI
+remains stable over longer time scales. In [3],i tw a ss h o w n
+that single-stream precoding maximizes the ergodic sum rate
+even when each user terminal (UT) is equipped with multiple
+antennas, owing to the rank-one nature of the channel matrices
+between each LEO satellite and UT. In line with the growing
+density of LEO satellite constellations [8], mMIMO transmis-
+sion for multi-LEO SATCOM systems has been addressed
+in [5], [6], [7]. While [5] and [6] considered coordinated trans-
+mission and reception across satellites, where only CSI-related
+Received 18 July 2025; accepted 11 August 2025. Date of publication
+14 August 2025; date of current version 10 November 2025. This work was
+supported in part by the Regional Innovation System and Education (RISE)
+Initiative, funded by the Ministry of Education (MOE) and administered by the
+National Research Foundation (NRF) of Korea; in part by the NRF funded by
+the MOE under Grant RS-2019-NR040079; and in part by the NRF funded by
+the MSIT under Grant RS-2023-00238977. The associate editor coordinating
+the review of this article and approving it for publication was K.-H. Ngo.
+(Corresponding author: Seok-Hwan Park.)
+The authors are with the Division of Electronic Engineering, Jeonbuk
+National University, Jeonju 54896, South Korea (e-mail: tkddnjs9803@
+jbnu.ac.kr; seokhwan@jbnu.ac.kr).
+Digital Object Identiﬁer 10.1109/LWC.2025.3598854
+parameters are exchanged among satellites, [7] investigated a
+fully-cooperative transmission scheme in which multiple LEO
+satellites exchange both CSI and UTs’ data via inter-satellite
+links (ISLs).
+While the aforementioned works focused on conven-
+tional space-division multiple access (SDMA) techniques,
+the integration of advanced rate-splitting multiple access
+(RSMA) technique [9] into SATCOM systems was explored
+in [10], [11], [12]. Speciﬁcally, [10] addressed RSMA-based
+multigroup multicast beamforming in multi-beam SATCOM
+systems under imperfect CSI, [11] investigated joint geosta-
+tionary orbit (GEO) and LEO precoding and message splitting
+in a hybrid GEO-multiple LEO network, and [12] focused on
+energy-efﬁcient RSMA design in ISAC-enabled LEO satellite
+systems. However, these works did not consider cooperative
+transmission among multiple LEO satellites [10], [11], [12],
+nor did they address practical optimization with sCSI in light
+of challenges in acquiring iCSI [10], [12].
+Motivated by these insights, this letter investigates the use
+of RSMA for cooperative downlink mMIMO transmission in
+a multiple-satellite SATCOM system, leveraging ISLs. Our
+objective is to optimize the downlink precoder to maximize
+the ergodic max-min fairness rate (MMFR) among UTs,
+relying solely on sCSI. To circumvent the computational
+burden of estimating the ergodic rate via sample averaging,
+we reformulate the problem using a closed-form upper bound
+on the ergodic rate. Given the non-convexity of the resulting
+optimization problem, we develop a weighted minimum mean
+square error (WMMSE)-based algorithm [13]. Numerical
+results demonstrate that the proposed RSMA-based coopera-
+tive scheme signiﬁcantly outperforms conventional SDMA and
+non-cooperative baselines, achieving performance close to that
+with perfect iCSI.
+Main contributions of this letter are summarized as follows.
+• We consider a multi-LEO SATCOM system with ISLs,
+enabling cooperative mMIMO RSMA transmission for
+effective interference management.
+• Recognizing the challenges in acquiring iCSI, we lever-
+age sCSI, which remains stable over longer periods.
+We formulate the problem of optimizing the downlink
+precoders to maximize the ergodic MMFR among UTs.
+• To overcome the challenge of computing ergodic rates,
+we reformulate the problem using closed-form upper
+bounds. We then develop a WMMSE-based algorithm,
+which guarantees a stationary point.
+• Through numerical evaluations, we demonstrate that
+the proposed sCSI-based RSMA scheme achieves
+performance close to that of its iCSI-based counterpart,
+outperforming conventional SDMA and non-cooperative
+baseline schemes.
+2162-2345 c⃝ 2025 IEEE. All rights reserved, including rights for text and data mining, and training of artiﬁcial intelligence
+and similar technologies. Personal use is permitted, but republication/redistribution requires IEEE permission.
+See https://www.ieee.org/publications/rights/index.html for more information.Authorized licensed use limited to: BEIJING UNIVERSITY OF POST AND TELECOM. Downloaded on January 15,2026 at 13:00:31 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 2 =====
+
+JO AND PARK: MULTI-SATELLITE COOPERATIVE MIMO TRANSMISSION: sCSI-AW ARE RSMA PRECODING DESIGN 3591
+Fig. 1. Illustration of the downlink of multiple-LEO satellite communication
+system with S = 4a n d K = 10.
+II. S YSTEM MODEL
+We consider a downlink transmission system in an NTN
+comprising multiple LEO satellites, cooperating with each
+other via ISLs, and ground UTs as shown in Fig. 1.
+Speciﬁcally, we consider S LEO satellites at altitude H and K
+UTs on the ground. Each satellite is equipped with a uniform
+planar array (UPA) of M = MxMy antenna elements, where
+Mx and My represent the number of antennas along the x-
+axis and y-axis, respectively. Similarly, each UT is equipped
+with a UPA consisting of N = Nx′ Ny′ elements, where Nx′
+and Ny′ denote the number of antennas along the x′-axis and
+the y′-axis. We deﬁne the index sets of satellites and UTs as
+S = {1, 2,..., S} and K = {1, 2,..., K}, respectively. The
+subset of satellites serving UT k ∈K is denoted by Sk , and
+the subset of UTs served by satellites s ∈S is denoted by
+Ks . Due to potential overlaps in satellite coverage areas, as
+depicted in Fig. 1, we assume cooperative transmission among
+satellites to jointly serve UTs within these overlapping regions.
+A. Satellite-to-UT Channel Model
+The received signal yk ∈CN×1 at each UT k is given by
+yk =
+∑
+s∈S
+Hk,sxs +zk = Hkx +zk, (1)
+where Hk,s ∈ CN×M denotes the channel matrix from
+satellite s to UT k, xs ∈ CM×1 is the transmit signal
+vector from satellite s, and zk ∼C N(0,σ2zI) is the additive
+noise vector. We deﬁne the aggregated channel matrix Hk ∈
+CN×MS and the stacked transmitted signal vectorx ∈CMS×1
+across all the satellites as Hk =[ Hk,1··· Hk,S ] and x =
+[xH
+1 ··· xH
+S ]H , respectively.
+Following [5], the channel matrix Hk,s is expressed as
+Hk,s = dk,sgH
+k,s, (2)
+where dk,s ∈ CN×1 and gk,s ∈ CM×1 denote
+the receive and transmit array response vectors at UT
+k and satellite s, respectively. The array response vec-
+tors for the l-th propagation path, denoted by d
+k,s,l and
+gk,s,l , are deﬁned as gk,s,l = ex(qx
+k,s,l ) ⊗ ey(qy
+k,s,l )
+and dk,s,l = ex′ (qx′
+k,s,l ) ⊗ey′ (qy′
+k,s,l ), where the steer-
+ing vector along axis v ∈{ x, y, x′, y′} is deﬁned as
+ev(x )= 1
+nv (1, e−j 2πdv
+λ x,..., e−j 2π(nv−1) dv
+λ x )T ∈ Cnv×1
+with qv
+k,s,l being the directional cosine of the l-th prop-
+agation path along axis v, nv the number of antennas,
+dv the antenna spacing, and λ the carrier wavelength.
+The directional cosines for the l-th path are given by
+qx
+k,s,l =s i n θy
+k,s,l cosθx
+k,s,l, qy
+k,s,l =c o s θy
+k,s,l, qx′
+k,s,l =
+sinϕy′
+k,s,l cosϕx′
+k,s,l, and qy′
+k,s,l =c o s ϕy′
+k,s,l , where θx
+k,s,l,
+θy
+k,s,l,ϕx′
+k,s,l and ϕy′
+k,s,l are the angles of the l-th path, as
+illustrated in Fig. 1. Given the considerable distance between
+LEO satellites and ground UTs, the multipath effects are
+predominantly shaped by the scattering environment near the
+UT. Therefore, the directional cosines for different paths
+associated with the same UT can be approximated as constant,
+i.e., q
+x
+k,s,l = qx
+k,s and qy
+k,s,l = qy
+k,s [2]. As a result, the
+transmit array response simpliﬁes to gk,s,l = gk,s , which
+varies slowly over time and is assumed to be known at
+satellite s [5].
+On the other hand, the receive array responsedk,s,l may vary
+with the path index l, and the overall receive response vector
+dk,s is modeled as dk,s =
+√
+βk,sκk,s/(κk,s +1 )dk,s,0 +√
+βk,s/(κk,s +1 )ˆdk,s , where dk,s,0 is the line-of-sight
+(LoS) component derived from {ϕx′
+k,s,0,ϕy′
+k,s,0} satisfying
+sin(ϕx′
+k,s,0)s i n (ϕy′
+k,s,0)=s i n αk,s . The parameter βk,s =
+GsatGut/(4πDk,s/λ)2 denotes the average channel power with
+the antenna gains Gsat and Gut, the propagation distance Dk,s ,
+and the carrier wavelength λ. The Rician factor is denoted by
+κk,s > 0, and ˆdk,s ∼C N(0,Σk,s ) represents the non LoS
+(NLoS) component with covariance matrixΣk,s ⪰ 0 normalized
+such that tr(Σk,s )=1 .
+Based on the discussion above, the aggregated channel
+matrix Hk from all satellites to UT k is given by
+Hk = DkGH
+k , (3)
+where Dk =[ dk,1··· dk,S ] ∈ CN×S , and Gk =
+blkdiag({gk,s}s∈S) ∈CMS×S .
+We assume that each satellite s independently estimates
+the local sCSI to its associated UTs, including the set
+{βk,s,κk,s, gk,s, dk,s,0, Σk,s}k∈Ks . Since this sCSI is deter-
+mined by relatively stable parameters such as the satellite-UT
+geometry, we assume that it remains constant during the
+precoding design phase [2]. After estimating sCSI, each satel-
+lite subsequently shares its local sCSI with other cooperating
+satellites via ISLs. Through this exchange, all participating
+S satellites acquire access to the global sCSI required for
+cooperative transmission. The delay due to sCSI exchange may
+make the shared sCSI outdated, leading to imperfect sCSI. A
+robust design with imperfect sCSI is left for future work.
+B. Cooperative RSMA Transmission
+To effectively manage inter-UT interference, we adopt the
+RSMA framework [9]. Speciﬁcally, we deﬁne the data stream
+vector as m =[ m
+c, mp,1, mp,2,..., mp,K ]T ∈ C(K +1)×1,
+where mc ∼C N(0, 1) represents the common data stream
+intended for all UTs, and mp,k ∼CN (0, 1) denotes the private
+data stream intended exclusively for UT k. The common
+stream mc decoded by all UTs enables RSMA to manage
+interference more ﬂexibly than SDMA [9], as both the beam-
+forming vector for mc and the allocation of the common
+rate among UTs can be jointly optimized. We assume the
+presence of reliable ISLs, which enables the LEO satellites to
+cooperatively transmit the data streams m.
+At each satellite s, the data stream vector m is linearly
+precoded into the transmit signal vector x
+s using a precoding
+Authorized licensed use limited to: BEIJING UNIVERSITY OF POST AND TELECOM. Downloaded on January 15,2026 at 13:00:31 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 3 =====
+
+3592 IEEE WIRELESS COMMUNICATIONS LETTERS, VOL. 14, NO. 11, NOVEMBER 2025
+matrix Qs =[ qc,s,qp,1,s,..., qp,K,s ] ∈ CM×(K +1),
+where qc,s and {qp,k,s}k∈K denote the common and private
+precoding vectors at satellite s, respectively. Deﬁning the
+precoding matrix Q ∈ CMS×(K +1) stacked across all the
+satellites as Q =[ QH
+1 ··· QH
+S ]H , the transmitted signal vector
+x across all satellites is given by
+x = Qm = qc mc +
+∑
+k∈K
+qp,k mp,k, (4)
+where qc =[ qH
+c,1··· qH
+c,S ]H ∈ CMS×1 and qp,k =
+[qH
+p,k,1··· qH
+p,k,S ]H ∈CMS×1. Each satellite s should satisfy
+a per-satellite transmit power constraint stated as ps (Q)=
+tr(EHs (qcqHc + ∑
+k∈Kqp,kqH
+p,k )Es ) ≤ P, where P is the
+transmit power budget per satellite, and Es ∈CMS×M is a
+selection matrix consisting of zeros except for the rows from
+M (s −1) + 1 to Ms, which form an identity matrix.
+UT k decodes the common data stream mc and its own
+private stream mp,k using successive interference cancellation
+(SIC) decoding. Unlike the private streams, the common
+stream should be decoded by all UTs. Accordingly, the ergodic
+rates of the common and private streams are given by R
+c =
+mink∈Kfc,k (Q) and Rp,k = fp,k (Q), respectively, where
+fc,k (Q)= E{ˆdk ,s}s∈S
+[
+log2 det
+(
+I +Σ−1
+c,kHkqcqH
+c HH
+k
+)]
+, (5)
+fp,k (Q)= E{ˆdk ,s}s∈S
+[
+log2 det
+(
+I +Σ−1
+p,kHkqp,kqH
+p,kHH
+k
+)]
+,
+with Σc,k = ∑
+l∈KHkqp,lqH
+p,lHH
+k + σ2zI and Σp,k =∑
+l∈K\{k} Hkqp,lqH
+p,lHH
+k +σ2zI. The function fc,k (Q) repre-
+sents the maximum ergodic rate at which the common stream
+mc can be decoded by UT k. The overall data rate for each
+UT k is given by Rk = Rc,k + Rp,k , where Rc,k ≥0 is the
+portion of the common data rate allocated to UT k, subject to
+the constraint ∑
+k∈KRc,k = Rc.
+III. P ROPOSED S CSI-A WA R EOPTIMIZATION
+To ensure the fairness among UTs, we aim to optimize the
+precoding matrix Q to maximize the MMFR metric, 1 deﬁned
+as mink∈KRk (i.e., the minimum ergodic rate across all UTs),
+while satisfying the power constraints at all LEO satellites.
+This optimization problem can be formulated as
+max.
+Q,R
+min
+k∈K
+(
+Rc,k + Rp,k
+)
+(6a)
+s.t.
+∑
+l∈K
+Rc,l ≤fc,k (Q), k ∈K, (6b)
+Rp,k ≤fp,k (Q), k ∈K, (6c)
+ps (Q) ≤P, s ∈S, (6d)
+qp,k,s = 0, if k /∈Ks, s ∈S, (6e)
+where R = {Rj,l}j∈{c,p},l∈K. The constraint (6e) ensures
+that each satellite s has access to the private data streams
+intended only for its associated UTs Ks .
+We note that the rate functions fc,k (Q) and fp,k (Q) do not
+admit closed-form expressions and typically require compu-
+tationally intensive sample-mean approximations of ergodic
+1We note that our approach can straightforwardly be applied to maximizing
+the weighted sum-rate ∑
+k∈KRk , which is another widely used fairness-
+promoting metric.
+rates. To overcome this difﬁculty, we approximate the problem
+using tractable closed-form upper bounds on the ergodic rates,
+as presented in Proposition 1.
+Proposition 1 (Ergodic Rate Upper Bounds): The ergodic
+rate functions of the common and private data streams, fc,k (Q)
+and fp,k (Q) in (5), are upper bounded as fc,k (Q) ≤f UB
+c,k (Q)
+and fp,k (Q) ≤f UB
+p,k (Q), respectively, where
+f UB
+c,k (Q)=l o g 2 det
+(
+I +
+(
+ΣUB
+c,k
+)−1 ˆHkqcqH
+c ˆHH
+k
+)
+, (7a)
+f UB
+p,k (Q)=l o g 2 det
+(
+I +
+(
+ΣUB
+p,k
+)−1 ˆHkqp,kqH
+p,k ˆHH
+k
+)
+.
+(7b)
+Here, we have deﬁned ΣUB
+c,k = ∑
+l∈K ˆHkqp,lqH
+p,l ˆHH
+k + σ2zI,
+ΣUB
+p,k = ∑
+l∈K\{k} ˆHkqp,lqH
+p,l ˆHH
+k +σ2zI, ˆHk =( Gk ˆDkGH
+k )
+1
+2
+with ˆDk = E[DH
+k Dk ] given as a function of sCSI as ˆDk =
+diag({βk,s}s∈S)+ DLoS
+k , and DLoS
+k is given by [DLoS
+k ]s′,s =√
+κk,s′βk,s′κk,sβk,s
+(κk,s′ +1)(κk,s +1)dH
+k,s′,0dk,s,0 for s′ ̸= s, while its diagonal
+elements are zero.
+Proof: To prove fc,k (Q) ≤f UB
+c,k (Q), we start from
+E
+[
+log2 det
+(
+I +Σ−1
+c,kHkqcqH
+c HH
+k
+)]
+(8a)
+= E
+⎡
+⎣log2 det
+⎛
+⎝
+σ2
+zI +
+⎛
+⎝qcqH
+c +
+∑
+l∈K
+qp,lqH
+p,l
+⎞
+⎠HH
+k Hk
+⎞
+⎠
+⎤
+⎦
+−E
+⎡
+⎣log2 det
+⎛
+⎝
+σ2
+zI +
+∑
+l∈K
+qp,lqH
+p,lHH
+k Hk
+⎞
+⎠
+⎤
+⎦ (8b)
+(a)
+≤ log2 det
+⎛
+⎝σ2
+zI +
+⎛
+⎝qcqH
+c +
+∑
+l∈K
+qp,lqH
+p,l
+⎞
+⎠E
+[
+HH
+k Hk
+]
+⎞
+⎠
+−log2 det
+⎛
+⎝σ2
+zI +
+∑
+l∈K
+qp,lqH
+p,l E
+[
+HH
+k Hk
+]
+⎞
+⎠, (8c)
+where the expectation is taken over{ˆdk,s}s∈S, and (a) follows
+from the concavity of the function f (X)=l o g 2 det(I+AX)−
+log2 det(I+BX) for A−B ⪰ 0 [14, Lemma 2], and by apply-
+ing Jensen’s inequality. By substituting E{ˆdk,s}s∈S
+[HH
+k Hk ]=
+ˆHH
+k ˆHk into the right-hand side (RHS) of (8c), we obtain the
+desired upper bound fc,k (Q) ≤ f UB
+c,k (Q). The other upper
+bound fp,k (Q) ≤ f UB
+p,k (Q) follows similarly by replacing the
+interference terms accordingly.
+Note that the upper bounds in (7) are provided in closed-
+form expressions and do not involve the expectation operator.
+Using these upper bounds, the original problem (6) is approx-
+imated as2
+max
+Q,R
+min
+k∈K
+(
+Rc,k + Rp,k
+)
+(9a)
+s.t.
+∑
+l∈K
+Rc,l ≤f UB
+c,k (Q), k ∈K, (9b)
+Rp,k ≤f UB
+p,k (Q), k ∈K, (9c)
+(6d), (6e). (9d)
+2Since the MMFR optimized from (9) is not guaranteed to be achievable,
+the ergodic rate functions fc,k (Q) and fp,k (Q) should be evaluated after
+optimization to assess the actual performance.
+Authorized licensed use limited to: BEIJING UNIVERSITY OF POST AND TELECOM. Downloaded on January 15,2026 at 13:00:31 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 4 =====
+
+JO AND PARK: MULTI-SATELLITE COOPERATIVE MIMO TRANSMISSION: sCSI-AW ARE RSMA PRECODING DESIGN 3593
+Although the reformulated problem (9) is more tractable
+than (6), it remains non-convex due to the constraints (9b)
+and (9c). In what follows, we propose a WMMSE-based
+algorithm to address this challenge.
+The upper bound rate function f UB
+c,k (Q) in (7a) measures
+the achievable rate of the common data stream mc when
+decoded from the virtual received signal ˆyc,k = ˆHkqc mc +∑
+l∈K ˆHkqp,l mp,l +zk , where ˆHk is a known sCSI-dependent
+matrix, as deﬁned in Proposition 1. Similarly, the private
+upper bound rate f UB
+p,k (Q) in (7b) corresponds to decod-
+ing the private stream mp,k from ˆyp,k = ˆHkqp,k mp,k +∑
+l∈K\{k} ˆHkqp,l mp,l +zk .
+With the observation above, we address problem (9)
+using the WMMSE approach. Speciﬁcally, we deﬁne the
+mean squared error (MSE) functions for the common and
+private data streams as e
+c,k (uc,k,Q)= Em,zk [|mc −
+uH
+c,k ˆyc,k|2]= |1 − uH
+c,k ˆHkqc|2 + uH
+c,kΣUB
+c,k uc,k , and
+ep,k (up,k,Q)= Em,zk [|mp,k − uH
+p,k ˆyp,k|2]= |1 −
+uH
+p,k ˆHkqp,k|2 + uH
+p,kΣUB
+p,kup,k , respectively, where uc,k ∈
+CMS×1 and up,k ∈CMS×1 represent combining vectors.
+Using the MSE expressions, the rate constraints in (9b)
+and (9c) can be equivalently rewritten as
+∑
+l∈K
+Rc,l ln 2 ≤ max
+vc,k >0,uc,k
+{
+ln vc,k −vc,k ec,k
+(
+uc,k,Q
+)
++1
+}
+,
+(10a)
+Rp,k ln 2 ≤ max
+vp,k >0,up,k
+{
+ln vp,k −vp,k ep,k
+(
+up,k,Q
+)
++1
+}
+,
+(10b)
+for k ∈K, where vc,k and vp,k are weight variables associated
+with the respective MSE functions. The optimal combining
+vectors and weight values, that maximize the RHSs of (10),
+for given Q are given by
+u
+c,k =
+(
+ˆHkqcqH
+c ˆHH
+k +ΣUB
+c,k
+)−1 ˆHkqc, (11a)
+up,k =
+(
+ˆHkqp,kqH
+p,k ˆHH
+k +ΣUB
+p,k
+)−1 ˆHkqp,k, (11b)
+vc,k =1 /ec,k
+(
+uc,k,Q
+)
+, vp,k =1 /ep,k
+(
+up,k,Q
+)
+.(11c)
+Accordingly, problem (9) can be equivalently restated as
+max
+Q,R,u,v
+min
+k∈K
+(
+Rc,k + Rp,k
+)
+(12a)
+s.t. (10a), (10b), (6d), (6e), (12b)
+vc,k > 0, vp,k > 0, k ∈K, (12c)
+where u = {uj,l}j∈{c,p},l∈K and v = {vj,l}j∈{c,p},l∈K.
+Note that for ﬁxed auxiliary variables {u, v}, the optimization
+over the beamforming matrix Q in (12) becomes convex
+and can be efﬁciently solved using standard convex solvers
+such as CVX [15]. Conversely, for a ﬁxed Q, the optimal
+{u,v} can be obtained in closed form as in (11). Therefore,
+the objective function can be monotonically improved by
+alternately updating the block variables Q and {u,v}.T h e
+detailed procedure of the WMMSE algorithm is summarized
+in Algorithm 1.
+The per-iteration complexity of Algorithm 1 is primarily
+dominated by that of solving the convex problem in Step 4
+Algorithm 1 Proposed sCSI-Aware WMMSE Algorithm
+1 Initialize: Initialize Q such that (6d) and (6e) are satisﬁed;
+2 Repeat
+3 update {u,v} as per (11) with Q ﬁxed;
+4 update {Q,R} as a solution of (12) with {u,v} ﬁxed;
+5 Until convergence
+of each iteration, which is upper bounded by O(nV (n3
+V +
+nC )l o gϵ) [16,p .4 ], where nV denotes the number of
+optimization variables, nC represents the number of arithmetic
+operations required to compute the objective and constraint
+function, and ϵ is the desired error tolerance level. For the
+convex problem in Step 4, we have nV = O(KMS ) and
+nC = O(K 2M 3S 3). Additionally, we numerically conﬁrmed
+that Algorithm 1 consistently converges within a few iterations
+across all simulated cases.
+IV . NUMERICAL RESULTS
+This section presents numerical results to validate the
+effectiveness of the proposed algorithm. Each satellite operates
+at an altitude of H = 600 km and has a maximum nadir
+angle ϑmax =3 0 ◦, resulting in overlapping service areas.
+The system operates at a carrier frequency of 2 GHz with
+a bandwidth of 50 MHz, and the noise temperature is set
+to T
+n = 290 K. We consider antenna conﬁgurations of
+[Mx, My, Nx′, Ny′ ]=[ 5 , 5, 4, 4] with antenna spacings being
+[dx, dy, dx′, dy′ ]=[ λ,λ,λ
+2, λ
+2 ]. The antenna gains are set to
+[Gsat, Gut]=[ 6 , 0] dBi. The Rician factor follows the S-
+band suburban scenario speciﬁed in [17]. UTs are randomly
+distributed within the combined service areas of the satellites.
+The maximum elevation angle αmax is determined by the
+maximum nadir angle ϑmax, and the corresponding maximum
+distance Dmax deﬁnes the coverage boundary of each satellite.
+The association between satellites and UTs is established
+based on the distance D
+k,s :i fU T k falls within the service
+area of satellite s (i.e., Dk,s ≤ Dmax), then UT k and
+satellite s belong to Ks and Sk , respectively. The covariance
+matrix of the NLoS component Σk,s is set as Σk,s =
+diag({μn}N
+n=1) with μn =˜μn/∑N
+l=1 ˜μl , where ˜μ1,..., ˜μN
+are independently sampled from U (0, 1). The noise variance
+σ2z is given by kB Tn B with the Boltzmann constant kB .
+To validate the effectiveness of the proposed sCSI-aware
+design for the multi-satellite cooperative RSMA transmission
+scheme, we compare the average MMFR achieved by RSMA
+and SDMA under both iCSI and sCSI conditions. For the
+sCSI case, we utilize the upper bounds on the ergodic rates
+for precoding optimization, as detailed in Section III, while
+the MMFR performance of the resulting precoding matrix is
+evaluated using the actual ergodic rate functions, computed via
+sample-mean approximation with 20,000 channel realizations.
+As a baseline, we also show the performance of precoders
+designed solely based on the LoS components, i.e., directional
+CSI (dCSI). Additionally, we include the performance of non-
+cooperative transmission schemes, where each UT is served
+solely by its nearest satellite. The performance of SDMA is
+evaluated by setting the beamforming vector for the common
+data stream to a zero vector, i.e., q
+c = 0.
+Authorized licensed use limited to: BEIJING UNIVERSITY OF POST AND TELECOM. Downloaded on January 15,2026 at 13:00:31 UTC from IEEE Xplore.  Restrictions apply. 
+
+===== PAGE 5 =====
+
+3594 IEEE WIRELESS COMMUNICATIONS LETTERS, VOL. 14, NO. 11, NOVEMBER 2025
+Fig. 2. Average MMFR versus transmit power P.
+Fig. 3. Average MMFR versus the number of satellites S.
+Fig. 2 illustrates the average MMFR as a function of
+satellite transmit power, for a SATCOM system with S = 4
+and K = 6. For both cooperative RSMA and SDMA schemes,
+the sCSI-aware design achieves performance that closely
+approaches that of the iCSI-based design. This is primarily
+due to the rank-1 nature of the channel matrices, as described
+in (2), where the basis vector g
+k,s of the one-dimensional row
+space of Hk,s is included in the sCSI set. The performance
+gain of RSMA over SDMA becomes more pronounced as the
+transmit power P increases. This is because the signal-to-noise
+ratio (SNR) at the UTs increases with P, and at higher SNRs,
+interference, which is more effectively handled by RSMA than
+SDMA, becomes the main performance bottleneck rather than
+noise. Moreover, the performance gap between RSMA and
+SDMA is more signiﬁcant in the multi-satellite cooperative
+scenario enabled by ISLs, compared to the non-cooperative
+transmission case. This highlights the synergistic beneﬁts
+of combining RSMA with cooperative satellite transmission
+strategies. The performance loss of the dCSI case compared
+to sCSI is more pronounced at SDMA than RSMA, indicating
+that the RSMA scheme is more robust to CSI imperfections.
+Fig. 3 shows the average MMFR while increasing the number
+of LEO satellites S, for a SATCOM system with K = 6 and
+P = 15 dBW. As the number of satellites increases, each UT
+is more likely to fall within overlapping coverage areas of
+multiple satellites. This leads to improved SNR at the UTs,
+resulting in more pronounced performance gains of RSMA
+over SDMA. Furthermore, as satellite density increases with
+larger S, the beneﬁts of inter-satellite cooperation enabled by
+ISLs become more evident. These observations support the
+effectiveness of the proposed approach that integrates RSMA
+with multi-satellite cooperative transmission, particularly in
+large-scale satellite constellations such as Starlink and OneWeb.
+V. C
+ONCLUSION
+We have studied the design of mMIMO precoding at LEO
+satellites for inter-satellite cooperative RSMA transmission.
+Considering the challenges in acquiring iCSI in SATCOM,
+we based the precoding design solely on sCSI. To handle
+the difﬁculty of computing ergodic rates, we approximated
+the ergodic MMFR maximization problem using closed-form
+upper bounds and developed a WMMSE-based algorithm.
+Numerical results demonstrate that the proposed sCSI-based
+scheme closely approaches the performance of the iCSI-
+based counterpart, except in scenarios dominated by NLoS
+components. Furthermore, the performance gain of RSMA
+over SDMA becomes more signiﬁcant when combined with
+inter-satellite cooperative transmission.
+R
+EFERENCES
+[1] E. Björnson and L. Sanguinetti, “Making cell-free massive MIMO com-
+petitive with MMSE processing and centralized implementation,” IEEE
+Trans. Wireless Commun., vol. 19. no. 1, pp. 77–90, Jan. 2020.
+[2] L. You, K.-X. Li, W. Gao, X.-G. Xia, and B. Ottersten, “Massive MIMO
+transmission for LEO satellite communications,” IEEE. J. Sel. Areas
+Commun., vol. 38, no. 8, pp. 1851–1865, Aug. 2020.
+[3] K.-X. Li et al., “Downlink transmit design for massive MIMO
+LEO satellite communications,” IEEE Trans. Commun. , vol. 70, no. 2,
+pp. 1014–1028, Feb. 2022.
+[4] L. You et al., “Beam squint-aware integrated sensing and communica-
+tions for hybrid massive MIMO LEO satellite systems,” IEEE. J. Sel.
+Areas Commun., vol. 40, no. 10, pp. 2944–3009, Oct. 2022.
+[5] Z. Xiang, X. Gao, K.-X. Li, and X.-G. Xia, “Massive MIMO downlink
+transmission for multiple LEO satellite communication,” IEEE Trans.
+Commun., vol. 72, no. 6, pp. 3352–3364, Jun. 2024.
+[6] Z. Xiang et al., “Massive MIMO uplink transmission for multiple LEO
+satellite communication,” IEEE Trans. Aerosp. Electron. Syst. , vol. 61,
+no. 2, pp. 4852–4865, Apr. 2025.
+[7] X. Zhang, S. Sun, M. Tao, Q. Huang, and X. Tang, “Multi-satellite
+cooperative networks: Joint hybrid beamforming and user scheduling
+design,” IEEE Trans. Wireless Commun., vol. 23, no. 7, pp. 7938–7952,
+Jul. 2024.
+[8] M. Y . Abdelsadek et al., “Future space networks: Toward the next
+giant leap for humankind,” IEEE Trans. Commun. , vol. 71, no. 2,
+pp. 949–1007, Feb. 2023.
+[9] J. Park et al., “Rate-splitting multiple access for 6G networks: Ten
+promising scenarios and applications,” IEEE Netw. , vol. 38, no. 3,
+pp. 128–136, May 2024.
+[10] L. Yin and B. Clerckx, “Rate-splitting multiple access for multigroup
+multicast and multibeam satellite systems,” IEEE Trans. Commun. ,
+vol. 69, no. 2, pp. 976–990, Feb. 2021.
+[11] Y . Xu, L. Yin, Y . Mao, W. Shin, and B. Clerckx, “Distributed rate-
+splitting multiple access for multilayer satellite communications,” IEEE
+Trans. Commun., vol. 72, no. 10, pp. 6131–6144, Oct. 2024.
+[12] Z. Liu, L. Yin, W. Shin, and B. Clerckx, “Rate-splitting multiple access
+for quantized ISAC LEO satellite systems: A max-min fair energy-
+efﬁcient beam design,” IEEE Trans. Wireless Commun., vol. 23, no. 10,
+pp. 15394–15408, Oct. 2024.
+[13] S. S. Christensen, R. Agarwal, E. De Carvalho, and J. M. Ciofﬁ,
+“Weighted sum-rate maximization using weighted MMSE for MIMO-
+BC beamforming design,” IEEE Trans. Wireless Commun. ,v o l . 7 ,
+no. 12, pp. 4792–4799, Dec. 2008.
+[14] C. Sun, X. Gao, M. Matthaiou, Z. Ding, and C. Xiao, “Beam division
+multiple access transmission for massive MIMO communications,”IEEE
+Trans. Commun., vol. 63, no. 6, pp. 2170–2184, Jun. 2015
+[15] M. Grant and S. Boyd. “CVX: MATLAB software for disciplined convex
+programming.” Jan. 2020. [Online]. Available: https://cvxr.com/cvx/
+[16] A. Ben-Tal and A. Nemirovski, “Lectures on modern con-
+vex optimization,” Lecture Notes, Georgia Inst. Technol., Atlanta,
+GA, USA, 2019. [Online]. Available: https://www2.isye.gatech.edu/
+nemirovs/LMCO_LN.pdf
+[17] “Study on new radio (NR) to support non-terrestrial networks (Release
+15),” 3GPP, Sophia Antipolis, France, Rep. 38.811, Jul. 2020.
+Authorized licensed use limited to: BEIJING UNIVERSITY OF POST AND TELECOM. Downloaded on January 15,2026 at 13:00:31 UTC from IEEE Xplore.  Restrictions apply. 
